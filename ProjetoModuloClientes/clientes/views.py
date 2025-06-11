@@ -5,6 +5,7 @@ from django.http import HttpResponseRedirect
 
 from .serializers import ClienteSerializer
 from rest_framework import viewsets, permissions
+from django.contrib.auth.decorators import login_required
 
 class ClienteViewSet(viewsets.ModelViewSet):
     queryset = Cliente.objects.all()
@@ -13,12 +14,14 @@ class ClienteViewSet(viewsets.ModelViewSet):
 
 # Create your views here.
 
+@login_required
 def listarClientes(request):
     
     clientes = Cliente.objects.all()
 
     return render(request, "listarClientes.html", {"clientes" : clientes})
 
+@login_required
 def cadastroCliente(request):
     
     if(request.method == "POST"):
@@ -36,6 +39,7 @@ def cadastroCliente(request):
     
     return render(request, "cadastroCliente.html")
 
+@login_required
 def excluirCliente(request, id):
 
     cliente = Cliente.objects.get(id=id)
@@ -43,6 +47,7 @@ def excluirCliente(request, id):
 
     return HttpResponseRedirect('/clientes/listarClientes')
 
+@login_required
 def editarCliente(request, id):
 
     cliente = Cliente.objects.get(id=id)
